@@ -1,0 +1,12 @@
+node{
+    stage 'Checkout code'
+        git branch: 'main', url: 'https://github.com/UKSBS/uksbs-test-automation-connect.git'
+    stage 'Restore Nuget'
+        bat "nuget.exe restore \"${workspace}/Uksbs.Connect.AutomatedTests.sln\""
+    stage 'Build'
+        bat "dotnet restore \"${workspace}/Uksbs.Connect.AutomatedTests.sln\""
+		bat "dotnet build \"${workspace}/Uksbs.Connect.AutomatedTests.sln\""
+    stage 'Test'
+        bat script: "dotnet test --filter Category=accessp60 --no-build"
+        archiveArtifacts artifacts: '/**/*TestReports/**/*', followSymlinks: false
+}
